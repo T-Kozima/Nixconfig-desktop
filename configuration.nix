@@ -17,15 +17,45 @@
     extraGroups = [ "wheel" "docker" ];
     shell = pkgs.fish;
   };
-  
+
   users.users.kojimatakumi = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" ];
   };
 
-  programs.niri.enable = true;
   programs.fish.enable = true;
-  
+  programs.dconf.enable = true;
+  programs.xwayland.enable = true;
+  programs.niri.enable = true;
+
+  programs.regreet = {
+	enable = true;
+	theme = {
+		name = "Adwaita-dark";
+		package = pkgs.gnome-themes-extra;
+	};
+	iconTheme = {
+		name = "Adwaita";
+		package = pkgs.adwaita-icon-theme;
+	};
+	cursorTheme = {
+		name = "Adwaita";
+		package = pkgs.adwaita-icon-theme;
+	};
+
+	settings = {
+		background = {
+			path = ./wallpaper_cosmos.png;
+			fit = "Cover";
+		};
+		GTK = {
+			application_prefer_dark_theme = true;
+		};
+	};
+
+  };
+
+
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
@@ -40,15 +70,26 @@
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
   ];
-   
 
+
+  environment.sessionVariables = {
+     XDG_CURRENT_DESKTOP = "niri";
+     NIXOS_OZONE_WL = "1";
+  };
 
   xdg.portal = {
     enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    extraPortals = [
+      pkgs.xdg-desktop-portal-hyprland
+      pkgs.xdg-desktop-portal-gtk
+    ];
     config = {
+      niri = {
+        default = lib.mkForce  [ "hyprland" "gtk" ];
+        "org.freedesktop.impl.portal.FileChooser" = [ "hyprland" ];
+      };
       common = {
-        default = ["gtk"];
+        default = [ "hyprland" "gtk" ];
       };
     };
   };
@@ -57,7 +98,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-user-session --user-menu ja --cmd 'bash -l -c niri-session'";
+        command = "${pkgs.cage}/bin/cage -s -- ${pkgs.regreet}/bin/regreet";
         user = "greeter";
       };
     };
@@ -80,6 +121,23 @@
     TTYVDisallocate = true;
   };
 
+  # services.displayManager.sessionPackages のブロックを丸ごとこれに置き換え
+  services.displayManager.sessionPackages = [
+    (pkgs.runCommand "niri-session-desktop" {
+      passthru.providedSessions = [ "niri" ];
+    } ''
+      mkdir -p $out/share/wayland-sessions
+      cat > $out/share/wayland-sessions/niri.desktop << EOF
+      [Desktop Entry]
+      Name=Niri
+      Comment=A scrollable-tiling Wayland compositor
+      Exec=${pkgs.niri}/bin/niri-session
+      Type=Application
+      DesktopNames=niri
+      EOF
+    '')
+  ];
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "25.11";
+
 }
