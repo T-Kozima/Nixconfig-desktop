@@ -1,7 +1,7 @@
 { pkgs, ...}:
 let randomWallpaper = pkgs.writeShellScriptBin "random-wallpaper" ''
      WALLPAPER_DIR="$HOME/dotfiles/wallpapers"
-     if [ ! -d "$WALLPAPER_DIR"] || [ -z "$(ls -A "$WALLPAPER_DIR")"]; then
+     if [ ! -d "$WALLPAPER_DIR" ] || [ -z "$(ls -A "$WALLPAPER_DIR")" ]; then
        exit 0
      fi
 
@@ -31,6 +31,11 @@ in
 		thunar-archive-plugin
 		file-roller
 		tumbler
+		bitwarden-desktop
+		rbw
+		rofi-rbw-wayland
+		pinentry-gnome3
+		floorp-bin
 	];
 
 

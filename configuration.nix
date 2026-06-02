@@ -14,7 +14,7 @@
 # user settings
   users.users.chronotokei = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [ "wheel" "docker" "bluetooth" "networkmanager" "audio" "video"];
     shell = pkgs.fish;
   };
 
@@ -55,16 +55,6 @@
 
   };
 
-
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    fcitx5.waylandFrontend = true;
-    fcitx5.addons = [
-      pkgs.fcitx5-mozc
-      pkgs.fcitx5-gtk
-    ];
-  };
 
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
@@ -111,7 +101,7 @@
 
   console.useXkbConfig = true;
 
-  systemd.services.greeted.serviceConfig = {
+  systemd.services.greetd.serviceConfig = {
     Type = "idle";
     StandardInput = "tty";
     StandardOutput = "tty";
@@ -137,7 +127,11 @@
       EOF
     '')
   ];
-  nixpkgs.config.allowUnfree = true;
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
+
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  hardware.enableRedistributableFirmware = true;
+  services.blueman.enable = true;
 
 }

@@ -7,7 +7,7 @@
 	auto-optimise-store = true;
   };
 
-  # garbedge collection
+  # garbage collection
   nix.gc = {
     automatic = true;
     dates = "weekly";

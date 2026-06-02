@@ -3,11 +3,8 @@
  programs.nix-ld.enable = true;
  environment.systemPackages = with pkgs; [
    wget
-   nix-ld
-   git
    gh
    docker-compose
-   fish
    vscode.fhs
    wireshark
    neovim
@@ -23,7 +20,6 @@
    gnupg
    mpd
    htop
-   firefox
    ripgrep
    fd
    jq
@@ -36,11 +32,8 @@
    unzip
    tree
    curl
-   fuzzel
-   zed-editor
    waybar
    nautilus
+   awww
   ];
-
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 }

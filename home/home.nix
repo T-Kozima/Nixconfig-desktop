@@ -11,7 +11,7 @@
   ];
 
   # バージョン指定（configuration.nixに合わせるか、最新の24.05にします）
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
   programs.home-manager.enable = true;
 
   gtk = {
@@ -34,7 +34,7 @@
     };
     cursorTheme = {
       name = "catppuccin-mocha-mauve-cursors";
-      package = pkgs.catppuccin-cursors.mochaPink;
+      package = pkgs.catppuccin-cursors.mochaMauve;
       size = 24;
     };
     gtk3.extraConfig = {
@@ -75,7 +75,7 @@
         };
 
         # 💡 Catppuccin Mocha の公式カラーパレット
-        colors = {
+        "colors-dark" = {
           alpha = "0.95";             # 背景の透過度（1.0で不透明、少し下げると背景が透けます）
           background = "1e1e2e";      # Base
           foreground = "cdd6f4";      # Text
