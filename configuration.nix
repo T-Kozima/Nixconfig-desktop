@@ -28,32 +28,7 @@
   programs.xwayland.enable = true;
   programs.niri.enable = true;
 
-  programs.regreet = {
-	enable = true;
-	theme = {
-		name = "Adwaita-dark";
-		package = pkgs.gnome-themes-extra;
-	};
-	iconTheme = {
-		name = "Adwaita";
-		package = pkgs.adwaita-icon-theme;
-	};
-	cursorTheme = {
-		name = "Adwaita";
-		package = pkgs.adwaita-icon-theme;
-	};
 
-	settings = {
-		background = {
-			path = ./wallpaper_cosmos.png;
-			fit = "Cover";
-		};
-		GTK = {
-			application_prefer_dark_theme = true;
-		};
-	};
-
-  };
 
 
   fonts.packages = with pkgs; [
@@ -84,15 +59,7 @@
     };
   };
 
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.cage}/bin/cage -s -- ${pkgs.regreet}/bin/regreet";
-        user = "greeter";
-      };
-    };
-  };
+
 
   services.xserver.xkb = {
     layout = "jp";
@@ -101,14 +68,11 @@
 
   console.useXkbConfig = true;
 
-  systemd.services.greetd.serviceConfig = {
-    Type = "idle";
-    StandardInput = "tty";
-    StandardOutput = "tty";
-    StandardError = "journal";
-    TTYReset = true;
-    TTYVHangup = true;
-    TTYVDisallocate = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    theme = "catppuccin-mocha-mauve";
+    package  = pkgs.kdePackages.sddm;
   };
 
   # services.displayManager.sessionPackages のブロックを丸ごとこれに置き換え
@@ -131,7 +95,15 @@
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
-  hardware.enableRedistributableFirmware = true;
   services.blueman.enable = true;
-
+  hardware.enableRedistributableFirmware = true;
+  hardware.firmware = [ pkgs.linux-firmware ];
+  boot.kernelPackages = pkgs.linuxPackages_6_12;
+  boot.kernelPatches = [
+    {
+      name = "btusb-add-13d3-3614-mt7922";
+      patch = ./btusb-mt7922-3614.patch;
+    }
+  ];
+  nixpkgs.config.allowUnfree = true;
 }

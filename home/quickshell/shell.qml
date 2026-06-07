@@ -9,6 +9,7 @@ import Quickshell.Services.SystemTray
 Scope {
     id: global
     property bool showCalender: false
+    property bool showControlCenter: false
 
     PanelWindow {
         id: root
@@ -240,6 +241,18 @@ Scope {
                 color: "#cdd6f4"
                 text: "Battery: " + root.currentBattery       // ✅ プロパティから読む
             }
+            Text {
+                color: "#cdd6f4"
+                text: "⚙️"
+                font.pixelSize: 14
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        global.showControlCenter = !global.showControlCenter;
+                    }
+                }
+            }
         }
     }
     PanelWindow {
@@ -278,6 +291,25 @@ Scope {
             stdout: StdioCollector {
                 onStreamFinished: calText.text = this.text
             }
+        }
+    }
+
+    PanelWindow {
+        id: controlCenterWidget
+        visible: global.showControlCenter
+        anchors {
+            top: true
+            left: true
+            right: true
+        }
+        margins.top: 40
+        exclusiveZone: 0
+        implicitHeight: 380
+        color: "transparent"
+
+        ControlCenter {
+            anchors.right: parent.right
+            anchors.rightMargin: 16
         }
     }
 }

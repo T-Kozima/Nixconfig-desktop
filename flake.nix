@@ -4,7 +4,11 @@
   # 💡 1. Home Manager の入力（Inputs）を追加します
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # 👈 ここを追加
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -19,10 +23,10 @@
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
-        
+
         modules = [
           ./configuration.nix
-          
+          ./noctalia.nix
           # 💡 3. ここで Home Manager のモジュールをシステムに合体させます！
           home-manager.nixosModules.home-manager
           {
