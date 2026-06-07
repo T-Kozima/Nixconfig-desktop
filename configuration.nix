@@ -98,7 +98,7 @@
   services.blueman.enable = true;
   hardware.enableRedistributableFirmware = true;
   hardware.firmware = [ pkgs.linux-firmware ];
-  boot.kernelPackages = pkgs.linuxPackages_6_12;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelPatches = [
     {
       name = "btusb-add-13d3-3614-mt7922";
