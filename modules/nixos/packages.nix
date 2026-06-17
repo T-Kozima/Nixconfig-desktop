@@ -33,9 +33,8 @@
    unzip
    tree
    curl
-   waybar
-   nautilus
    awww
+   alacritty
    (pkgs.catppuccin-sddm.override {
      flavor = "mocha";
      accent = "mauve";
@@ -46,4 +45,6 @@
      loginBackground = true;
    })
  ];
+
+
 }

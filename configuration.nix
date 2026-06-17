@@ -34,6 +34,7 @@
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
+    noto-fonts
   ];
 
 
@@ -95,6 +96,22 @@
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.settings = {
+    General = {
+      FastConnectable = true;
+      JustWorksRepairing = "always";
+      Privacy = "off";
+    };
+    Policy = {
+      AutoEnable = true;
+    };
+    LE = {
+      MinConnectionInterval = 7;
+      MaxConnectionInterval = 9;
+      ConnectionLatency = 0;
+      ConnectionSupervisionTimeout = 100;
+    };
+  };
   services.blueman.enable = true;
   hardware.enableRedistributableFirmware = true;
   hardware.firmware = [ pkgs.linux-firmware ];
@@ -106,4 +123,7 @@
     }
   ];
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+  ];
 }

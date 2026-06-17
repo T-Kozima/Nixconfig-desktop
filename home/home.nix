@@ -14,6 +14,13 @@
   home.stateVersion = "26.05";
   programs.home-manager.enable = true;
 
+  home.sessionVariables = {
+    FLAKE = "/home/chronotokei/dotfiles";
+    EDITOR = "zed-editor";
+    LANG = "ja_JP.UTF-8";
+  };
+
+
   gtk = {
   	enable = true;
     theme = {
