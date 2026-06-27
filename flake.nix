@@ -25,7 +25,7 @@
         specialArgs = { inherit inputs; };
 
         modules = [
-          ./configuration.nix
+          ./hosts/nixos/default.nix
           ./noctalia.nix
           # 💡 3. ここで Home Manager のモジュールをシステムに合体させます！
           home-manager.nixosModules.home-manager

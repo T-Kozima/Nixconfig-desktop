@@ -1,20 +1,17 @@
 { config, lib, pkgs, ... }:
+
 {
   imports = [
-    ./hardware-configuration.nix
-    ./modules/nixos/nix.nix
-   # ./modules/nixos/wsl.nix
-    ./modules/nixos/docker.nix
-    ./modules/nixos/i18n.nix
-    ./modules/nixos/packages.nix
+    ../../modules/nixos/nix.nix
+    ../../modules/nixos/docker.nix
+    ../../modules/nixos/i18n.nix
+    ../../modules/nixos/packages.nix
   ];
-# boot loader settings
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-# user settings
+
+  # ユーザー設定
   users.users.chronotokei = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "bluetooth" "networkmanager" "audio" "video"];
+    extraGroups = [ "wheel" "docker" "bluetooth" "networkmanager" "audio" "video" ];
     shell = pkgs.fish;
   };
 
@@ -28,15 +25,11 @@
   programs.xwayland.enable = true;
   programs.niri.enable = true;
 
-
-
-
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     noto-fonts
   ];
-
 
   environment.sessionVariables = {
      XDG_CURRENT_DESKTOP = "niri";
@@ -51,7 +44,7 @@
     ];
     config = {
       niri = {
-        default = lib.mkForce  [ "hyprland" "gtk" ];
+        default = lib.mkForce [ "hyprland" "gtk" ];
         "org.freedesktop.impl.portal.FileChooser" = [ "hyprland" ];
       };
       common = {
@@ -59,8 +52,6 @@
       };
     };
   };
-
-
 
   services.xserver.xkb = {
     layout = "jp";
@@ -76,7 +67,6 @@
     package  = pkgs.kdePackages.sddm;
   };
 
-  # services.displayManager.sessionPackages のブロックを丸ごとこれに置き換え
   services.displayManager.sessionPackages = [
     (pkgs.runCommand "niri-session-desktop" {
       passthru.providedSessions = [ "niri" ];
@@ -92,36 +82,9 @@
       EOF
     '')
   ];
+
   system.stateVersion = "26.05";
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  hardware.bluetooth.settings = {
-    General = {
-      FastConnectable = true;
-      JustWorksRepairing = "always";
-      Privacy = "off";
-    };
-    Policy = {
-      AutoEnable = true;
-    };
-    LE = {
-      MinConnectionInterval = 7;
-      MaxConnectionInterval = 9;
-      ConnectionLatency = 0;
-      ConnectionSupervisionTimeout = 100;
-    };
-  };
-  services.blueman.enable = true;
-  hardware.enableRedistributableFirmware = true;
-  hardware.firmware = [ pkgs.linux-firmware ];
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPatches = [
-    {
-      name = "btusb-add-13d3-3614-mt7922";
-      patch = ./btusb-mt7922-3614.patch;
-    }
-  ];
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
