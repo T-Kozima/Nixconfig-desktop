@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../common/default.nix
+    ./kanshi.nix
   ];
 
   # ホスト名を設定

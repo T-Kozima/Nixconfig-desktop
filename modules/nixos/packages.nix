@@ -44,6 +44,8 @@
 
      loginBackground = true;
    })
+   vanilla-dmz
+   kitty
  ];
 
 

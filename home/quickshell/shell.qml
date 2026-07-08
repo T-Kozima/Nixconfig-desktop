@@ -18,10 +18,11 @@ Scope {
             left: true
             right: true
         }
-        implicitHeight: 32
-        color: "#1e1e2e"
+        implicitHeight: 30
+        color: "#d91a1b26" // Tokyo Night Storm + 85% opacity (with blur from niri)
+        namespace: "quickshell-bar"
 
-        property string currentTime: new Date().toLocaleTimeString(Qt.locale("ja_JP"), "HH:mm:ss")
+        property string currentTime: ""
         property string currentWorkspace: "?"   // ✅ 結果を受け取る変数
         property string currentIme: "?"         // ✅ 結果を受け取る変数
         property string currentBattery: "?"
@@ -35,7 +36,7 @@ Scope {
                 id: wsProcess
                 command: ["sh", "-c", "niri msg -j workspaces | jq -r '.[] | select(.is_focused) | .idx'"]
                 running: true
-                stdout: StdioCollector {                          // ✅ パーサー指定
+                stdout: StdioCollector {
                     onStreamFinished: root.currentWorkspace = this.text.trim()
                 }
             }
@@ -43,7 +44,7 @@ Scope {
                 interval: 200
                 running: true
                 repeat: true
-                onTriggered: wsProcess.running = true            // ✅ falseにしなくていい
+                onTriggered: wsProcess.running = true
             }
 
             // --- 2. 時計 ---
@@ -51,7 +52,8 @@ Scope {
                 interval: 1000
                 running: true
                 repeat: true
-                onTriggered: root.currentTime = Qt.formatDateTime(new Date(), "yyyy/MM/dd HH:mm:ss")
+                triggeredOnStart: true
+                onTriggered: root.currentTime = Qt.formatDateTime(new Date(), "M月d日(ddd) H:mm")
             }
 
             // --- 3. IME ---
@@ -59,7 +61,7 @@ Scope {
                 id: imeProcess
                 command: ["fcitx5-remote", "-n"]
                 running: true
-                stdout: StdioCollector {                          // ✅ パーサー指定
+                stdout: StdioCollector {
                     onStreamFinished: root.currentIme = this.text.trim()
                 }
             }
@@ -73,7 +75,7 @@ Scope {
             // --- 4. バッテリー ---
             Process {
                 id: batteryProcess
-                command: ["sh", "-c", "cat /sys/class/power_supply/BAT0/capacity"]
+                command: ["sh", "-c", "cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo 100"]
                 running: true
                 stdout: StdioCollector {
                     onStreamFinished: root.currentBattery = this.text.trim()
@@ -122,27 +124,47 @@ Scope {
                 id: volDownProcess
                 command: ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%-"]
             }
-            // 6.カレンダー
-            Process {
-                id: calendarPopup
-                command: ["foot", "--app-id=qs-calendar", "-e", "bash", "-c", "cal -3 && read -n 1 -s"]
-            }
         }
 
-        Text {
+        // Left section (macOS Apple menu style & workspace)
+        Row {
             anchors {
                 left: parent.left
                 leftMargin: 16
                 verticalCenter: parent.verticalCenter
             }
-            color: "#a6e3a1"
-            text: "Workspace: " + root.currentWorkspace    // ✅ プロパティから読む
+            spacing: 12
+
+            Text {
+                text: ""
+                color: "#7aa2f7"
+                font.bold: true
+                font.pixelSize: 16
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Text {
+                text: "Finder"
+                color: "#c0caf5"
+                font.bold: true
+                font.pixelSize: 13
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Text {
+                text: "WS: " + root.currentWorkspace
+                color: "#a9b1d6"
+                font.pixelSize: 13
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
+
+        // Center Section: Localized Date/Time (macOS Style)
         Text {
             anchors.centerIn: parent
-            color: "#cdd6f4"
+            color: "#c0caf5"
             font.bold: true
-            font.pixelSize: 15
+            font.pixelSize: 13
             text: root.currentTime
             MouseArea {
                 anchors.fill: parent
@@ -153,6 +175,7 @@ Scope {
             }
         }
 
+        // Right Section: Status icons & system settings
         Row {
             anchors {
                 right: parent.right
@@ -168,8 +191,8 @@ Scope {
                 Repeater {
                     model: SystemTray.items
                     delegate: Item {
-                        width: 20
-                        height: 20
+                        width: 18
+                        height: 18
                         anchors.verticalCenter: parent.verticalCenter
 
                         IconImage {
@@ -213,8 +236,9 @@ Scope {
             }
 
             Text {
-                color: "#cdd6f4"
-                text: "Volume: " + root.currentVolume
+                color: "#c0caf5"
+                font.pixelSize: 12
+                text: "🔊 " + root.currentVolume
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
@@ -234,15 +258,19 @@ Scope {
             }
 
             Text {
-                color: "#cdd6f4"
-                text: "IME: " + root.currentIme               // ✅ プロパティから読む
+                color: "#c0caf5"
+                font.pixelSize: 12
+                text: "⌨️ " + root.currentIme
             }
+
             Text {
-                color: "#cdd6f4"
-                text: "Battery: " + root.currentBattery       // ✅ プロパティから読む
+                color: "#c0caf5"
+                font.pixelSize: 12
+                text: "🔋 " + root.currentBattery + "%"
             }
+
             Text {
-                color: "#cdd6f4"
+                color: "#7aa2f7"
                 text: "⚙️"
                 font.pixelSize: 14
                 MouseArea {
@@ -255,6 +283,7 @@ Scope {
             }
         }
     }
+
     PanelWindow {
         id: calenderWidget
         visible: global.showCalender
@@ -263,7 +292,7 @@ Scope {
             left: true
             right: true
         }
-        margins.top: 40
+        margins.top: 36
         exclusiveZone: 0
         implicitHeight: 200
         color: "transparent"
@@ -272,16 +301,16 @@ Scope {
             width: 230
             height: 200
             anchors.horizontalCenter: parent.horizontalCenter
-            color: "#1e1e2e"
-            border.color: "#89b4fa"
-            border.width: 2
-            radius: 12
+            color: "#d91e1f29" // Tokyo Night Night + 85% opacity
+            border.color: "#3b4261"
+            border.width: 1
+            radius: 14
             Text {
                 id: calText
                 anchors.centerIn: parent
-                color: "#cdd6f4"
+                color: "#c0caf5"
                 font.family: "monospace"
-                font.pixelSize: 15
+                font.pixelSize: 14
                 text: "Loading..."
             }
         }
@@ -302,7 +331,7 @@ Scope {
             left: true
             right: true
         }
-        margins.top: 40
+        margins.top: 36
         exclusiveZone: 0
         implicitHeight: 380
         color: "transparent"
@@ -310,6 +339,102 @@ Scope {
         ControlCenter {
             anchors.right: parent.right
             anchors.rightMargin: 16
+        }
+    }
+
+    //  macOS Style Dock at the bottom (Tokyo Night theme)
+    PanelWindow {
+        id: dockWindow
+        anchors {
+            bottom: true
+            horizontalCenter: parent.horizontalCenter
+        }
+        margins.bottom: 10
+        exclusiveZone: 0
+        implicitHeight: 64
+        implicitWidth: dockRow.width + 32
+        color: "transparent"
+        namespace: "quickshell-dock"
+
+        Rectangle {
+            anchors.fill: parent
+            color: "#d916161e" // Tokyo Night + 85% opacity
+            border.color: "#3b4261"
+            border.width: 1
+            radius: 20
+
+            // Inner glass sheen
+            Rectangle {
+                width: parent.width
+                height: 1
+                color: "#ffffff15"
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                radius: 20
+            }
+        }
+
+        Row {
+            id: dockRow
+            anchors.centerIn: parent
+            spacing: 16
+            padding: 8
+
+            // Icon theme names of the favorite apps
+            readonly property var apps: [
+                { icon: "floorp", cmd: "floorp" },
+                { icon: "alacritty", cmd: "alacritty" },
+                { icon: "utilities-terminal", cmd: "foot" },
+                { icon: "zed", cmd: "zed" },
+                { icon: "obsidian", cmd: "obsidian" },
+                { icon: "system-file-manager", cmd: "thunar" }
+            ]
+
+            Repeater {
+                model: dockRow.apps
+                delegate: Item {
+                    width: 48
+                    height: 48
+
+                    Rectangle {
+                        id: bgHighlight
+                        anchors.fill: parent
+                        color: "#ffffff12"
+                        radius: 12
+                        visible: mouseArea.containsMouse
+                    }
+
+                    IconImage {
+                        id: appIcon
+                        anchors.fill: parent
+                        anchors.margins: 4
+                        source: "image://icon/" + modelData.icon
+                        smooth: true
+                        
+                        // Zoom in animation on hover
+                        scale: mouseArea.containsMouse ? 1.18 : 1.0
+                        Behavior on scale {
+                            NumberAnimation { duration: 150; easing.type: Easing.OutQuad }
+                        }
+                    }
+
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            launchProcess.command = [modelData.cmd];
+                            launchProcess.running = true;
+                        }
+                    }
+
+                    Process {
+                        id: launchProcess
+                    }
+                }
+            }
         }
     }
 }

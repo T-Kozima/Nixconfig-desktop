@@ -8,9 +8,9 @@ Rectangle {
     id: ccContainer
     width: 320
     height: 380
-    color: "#1e1e2e"
-    border.color: "#313244"
-    border.width: 2
+    color: "#e616161f" // Tokyo Night Night + 90% opacity (with blur from niri)
+    border.color: "#3b4261"
+    border.width: 1
     radius: 16
 
     // PipeWire audio helpers
@@ -90,7 +90,7 @@ Rectangle {
                 width: 44
                 height: 44
                 radius: 22
-                color: "#313244"
+                color: "#2e3c64" // Tokyo Night Dark Surface
                 Text {
                     anchors.centerIn: parent
                     text: "👤"
@@ -102,13 +102,13 @@ Rectangle {
                 spacing: 2
                 Text {
                     text: "chronotokei"
-                    color: "#cdd6f4"
+                    color: "#c0caf5"
                     font.bold: true
                     font.pixelSize: 15
                 }
                 Text {
                     text: "NixOS / Niri Desktop"
-                    color: "#a6adc8"
+                    color: "#a9b1d6"
                     font.pixelSize: 11
                 }
             }
@@ -120,11 +120,11 @@ Rectangle {
                 width: 28
                 height: 28
                 radius: 14
-                color: closeMouse.containsMouse ? "#45475a" : "#313244"
+                color: closeMouse.containsMouse ? "#3b4261" : "#24283b"
                 Text {
                     anchors.centerIn: parent
                     text: "✕"
-                    color: "#cdd6f4"
+                    color: "#c0caf5"
                     font.pixelSize: 12
                 }
                 MouseArea {
@@ -141,7 +141,7 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             height: 1
-            color: "#313244"
+            color: "#3b4261"
         }
 
         // 2. Quick Toggles Grid (2x2)
@@ -156,7 +156,7 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 48
                 radius: 10
-                color: ccContainer.muted ? "#f38ba8" : "#313244"
+                color: ccContainer.muted ? "#f7768e" : "#24283b"
                 
                 RowLayout {
                     anchors.fill: parent
@@ -168,7 +168,7 @@ Rectangle {
                     }
                     Text {
                         text: ccContainer.muted ? "消音中" : "消音"
-                        color: ccContainer.muted ? "#11111b" : "#cdd6f4"
+                        color: ccContainer.muted ? "#1d202f" : "#c0caf5"
                         font.pixelSize: 12
                         font.bold: true
                     }
@@ -185,7 +185,7 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 48
                 radius: 10
-                color: root.currentIme === "mozc" ? "#b4befe" : "#313244"
+                color: root.currentIme === "mozc" ? "#7aa2f7" : "#24283b"
                 
                 RowLayout {
                     anchors.fill: parent
@@ -197,7 +197,7 @@ Rectangle {
                     }
                     Text {
                         text: "IME: " + root.currentIme
-                        color: root.currentIme === "mozc" ? "#11111b" : "#cdd6f4"
+                        color: root.currentIme === "mozc" ? "#1d202f" : "#c0caf5"
                         font.pixelSize: 12
                         font.bold: true
                     }
@@ -216,7 +216,7 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 48
                 radius: 10
-                color: ccContainer.redshiftActive ? "#f9e2af" : "#313244"
+                color: ccContainer.redshiftActive ? "#e0af68" : "#24283b"
                 
                 RowLayout {
                     anchors.fill: parent
@@ -228,7 +228,7 @@ Rectangle {
                     }
                     Text {
                         text: "夜間モード"
-                        color: ccContainer.redshiftActive ? "#11111b" : "#cdd6f4"
+                        color: ccContainer.redshiftActive ? "#1d202f" : "#c0caf5"
                         font.pixelSize: 12
                         font.bold: true
                     }
@@ -247,7 +247,7 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 48
                 radius: 10
-                color: global.showCalender ? "#a6e3a1" : "#313244"
+                color: global.showCalender ? "#9ece6a" : "#24283b"
                 
                 RowLayout {
                     anchors.fill: parent
@@ -259,7 +259,7 @@ Rectangle {
                     }
                     Text {
                         text: "カレンダー"
-                        color: global.showCalender ? "#11111b" : "#cdd6f4"
+                        color: global.showCalender ? "#1d202f" : "#c0caf5"
                         font.pixelSize: 12
                         font.bold: true
                     }
@@ -286,13 +286,13 @@ Rectangle {
                 Layout.fillWidth: true
                 Text {
                     text: "音量"
-                    color: "#a6adc8"
+                    color: "#a9b1d6"
                     font.pixelSize: 11
                 }
                 Item { Layout.fillWidth: true }
                 Text {
                     text: ccContainer.muted ? "消音中" : Math.round(ccContainer.volume * 100) + "%"
-                    color: "#cdd6f4"
+                    color: "#c0caf5"
                     font.pixelSize: 12
                     font.bold: true
                 }
@@ -303,14 +303,14 @@ Rectangle {
                 id: sliderBg
                 Layout.fillWidth: true
                 height: 12
-                color: "#313244"
+                color: "#24283b"
                 radius: 6
 
                 // Active Fill
                 Rectangle {
                     width: Math.max(0, Math.min(sliderBg.width, sliderBg.width * ccContainer.volume))
                     height: parent.height
-                    color: ccContainer.muted ? "#45475a" : "#89b4fa"
+                    color: ccContainer.muted ? "#414868" : "#7aa2f7"
                     radius: 6
                 }
 
@@ -339,7 +339,7 @@ Rectangle {
         Rectangle {
             Layout.fillWidth: true
             height: 1
-            color: "#313244"
+            color: "#3b4261"
         }
 
         // 4. Power Actions Footer
@@ -352,11 +352,11 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 38
                 radius: 8
-                color: suspMouse.containsMouse ? "#45475a" : "#313244"
+                color: suspMouse.containsMouse ? "#3b4261" : "#24283b"
                 Text {
                     anchors.centerIn: parent
                     text: "💤 サスペンド"
-                    color: "#cdd6f4"
+                    color: "#c0caf5"
                     font.pixelSize: 11
                     font.bold: true
                 }
@@ -374,11 +374,11 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 38
                 radius: 8
-                color: rebMouse.containsMouse ? "#45475a" : "#313244"
+                color: rebMouse.containsMouse ? "#3b4261" : "#24283b"
                 Text {
                     anchors.centerIn: parent
                     text: "🔄 再起動"
-                    color: "#cdd6f4"
+                    color: "#c0caf5"
                     font.pixelSize: 11
                     font.bold: true
                 }
@@ -396,11 +396,11 @@ Rectangle {
                 Layout.fillWidth: true
                 height: 38
                 radius: 8
-                color: pwrMouse.containsMouse ? "#f38ba8" : "#313244"
+                color: pwrMouse.containsMouse ? "#f7768e" : "#24283b"
                 Text {
                     anchors.centerIn: parent
                     text: "🔌 シャットダウン"
-                    color: pwrMouse.containsMouse ? "#11111b" : "#f38ba8"
+                    color: pwrMouse.containsMouse ? "#1d202f" : "#f7768e"
                     font.pixelSize: 11
                     font.bold: true
                 }

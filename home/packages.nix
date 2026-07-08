@@ -99,65 +99,64 @@ in
          size = 11.0;
        };
 
-       # 3. カラーテーマ (Catppuccin Mocha)
-       # コントラストが強すぎず、niriのモダンな画面に調和します
-       colors = {
-         primary = {
-           background = "0x1e1e2e";
-           foreground = "0xcdd6f4";
-           dim_foreground = "0x7f849c";
-         };
-         cursor = {
-           text = "0x1e1e2e";
-           cursor = "0xf5e0dc";
-         };
-         vi_mode_cursor = {
-           text = "0x1e1e2e";
-           cursor = "0xb4befe";
-         };
-         search = {
-           matches = {
-             foreground = "0x1e1e2e";
-             background = "0xa6adc8";
-           };
-           focused_match = {
-             foreground = "0x1e1e2e";
-             background = "0xa6e3a1";
-           };
-         };
-         hints = {
-           start = {
-             foreground = "0x1e1e2e";
-             background = "0xf9e2af";
-           };
-           end = {
-             foreground = "0x1e1e2e";
-             background = "0xa6adc8";
-           };
-         };
+        # 3. カラーテーマ (Tokyo Night Storm)
+        colors = {
+          primary = {
+            background = "0x1a1b26";
+            foreground = "0xc0caf5";
+            dim_foreground = "0xa9b1d6";
+          };
+          cursor = {
+            text = "0x1a1b26";
+            cursor = "0xc0caf5";
+          };
+          vi_mode_cursor = {
+            text = "0x1a1b26";
+            cursor = "0x7aa2f7";
+          };
+          search = {
+            matches = {
+              foreground = "0x1a1b26";
+              background = "0x3b4261";
+            };
+            focused_match = {
+              foreground = "0x1a1b26";
+              background = "0x9ece6a";
+            };
+          };
+          hints = {
+            start = {
+              foreground = "0x1a1b26";
+              background = "0xe0af68";
+            };
+            end = {
+              foreground = "0x1a1b26";
+              background = "0x3b4261";
+            };
+          };
 
-         # 標準の16色パレット
-         normal = {
-           black = "0x45475a";
-           red = "0xf38ba8";
-           green = "0xa6e3a1";
-           yellow = "0xf9e2af";
-           blue = "0x89b4fa";
-           magenta = "0xf5c2e7";
-           cyan = "0x94e2d5";
-           white = "0xbac2de";
-         };
-         bright = {
-           black = "0x585b70";
-           red = "0xf38ba8";
-           green = "0xa6e3a1";
-           yellow = "0xf9e2af";
-           blue = "0x89b4fa";
-           magenta = "0xf5c2e7";
-           cyan = "0x94e2d5";
-           white = "0xa6adc8";
-         };
-       };
+          # 標準の16色パレット
+          normal = {
+            black = "0x15161e";
+            red = "0xf7768e";
+            green = "0x9ece6a";
+            yellow = "0xe0af68";
+            blue = "0x7aa2f7";
+            magenta = "0xbb9af7";
+            cyan = "0x7dcfff";
+            white = "0xa9b1d6";
+          };
+          bright = {
+            black = "0x414868";
+            red = "0xf7768e";
+            green = "0x9ece6a";
+            yellow = "0xe0af68";
+            blue = "0x7aa2f7";
+            magenta = "0xbb9af7";
+            cyan = "0x7dcfff";
+            white = "0xc0caf5";
+          };
+        };
      };
    };
 }

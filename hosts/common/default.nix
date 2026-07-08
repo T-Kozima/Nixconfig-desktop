@@ -53,18 +53,26 @@
     };
   };
 
-  services.xserver.xkb = {
-    layout = "jp";
-    model = "jp106";
+  services.xserver= {
+    xkb = {
+      layout = "jp";
+      model = "jp106";
+    };
+    enable = true;
   };
 
   console.useXkbConfig = true;
 
   services.displayManager.sddm = {
     enable = true;
-    wayland.enable = true;
+    wayland.enable = false;
     theme = "catppuccin-mocha-mauve";
     package  = pkgs.kdePackages.sddm;
+    settings = {
+      Theme = {
+        CursorTheme = "Vanilla-DMZ";
+      };
+    };
   };
 
   services.displayManager.sessionPackages = [
@@ -89,4 +97,5 @@
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
   ];
+
 }
