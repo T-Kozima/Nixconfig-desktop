@@ -8,6 +8,7 @@
   # 💡 ここで「ユーザー専用のパッケージリスト」を読み込みます
   imports = [
     ./packages.nix
+    ./common/neovim.nix
   ];
 
   # バージョン指定（configuration.nixに合わせるか、最新の24.05にします）

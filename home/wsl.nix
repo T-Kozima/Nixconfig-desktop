@@ -2,6 +2,8 @@
 
 # WSL 用の home-manager 設定。デスクトップ用 home/home.nix（niri・GTK など）は使わない。
 {
+  imports = [ ./common/neovim.nix ];
+
   home.username = "nixos";
   home.homeDirectory = "/home/nixos";
   home.stateVersion = "26.05";
