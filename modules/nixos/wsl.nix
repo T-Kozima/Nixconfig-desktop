@@ -1,19 +1,17 @@
 { pkgs, ... }:
-{
-  wsl.enable = true;
-  wsl.defaultUser = "nixos";
 
+# NixOS-WSL 固有の設定（hosts/wsl だけが import する）
+{
+  wsl = {
+    enable = true;
+    defaultUser = "nixos";
+    # Windows の PATH / exe を WSL から呼べるようにする（既定値を明示）
+    interop.includePath = true;
+    # Windows のスタートメニューに WSL 内の GUI アプリのショートカットを作る
+    startMenuLaunchers = true;
+  };
+
+  # ログインシェルは fish。starship / alias は home-manager 側(home/wsl.nix)で設定する
   programs.fish.enable = true;
   users.users.nixos.shell = pkgs.fish;
-
-  programs.starship.enable = true;
-  programs.fish.interactiveShellInit = ''
-    starship init fish | source
-  '';
-
-  programs.fish.shellAliases = {
-   nr = "sudo nixos-rebuild switch --flake .#nixos";
-   ll = "ls -l";
-   gs = "git status";
-  };
 }
